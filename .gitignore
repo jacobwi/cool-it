@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 /src/config/firebase.js
 # misc

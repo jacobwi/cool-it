@@ -50,7 +50,7 @@
     "wait-on": "^3.2.0"
   },
   "build": {
-    "appId": "com.example.electron-cra",
+    "appId": "com.cool-it.electron-cra",
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -59,7 +59,7 @@
       "buildResources": "assets"
     },
     "mac": {
-      "category": "your.app.category.type"
+      "category": "your.app.social.type"
     }
   }
 }
