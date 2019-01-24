@@ -41,9 +41,11 @@ class Messages extends React.Component {
     messages.length > 0 &&
     messages.map(message => (
       <Message
+        key={message.timestamp}
         user={message.author}
         message={message.body}
         time={message.timestamp}
+        extra={message}
       />
     ));
   render() {

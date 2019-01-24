@@ -1,7 +1,7 @@
 import React from "react";
 import { Segment, Button, Input, Icon } from "semantic-ui-react";
 import styled from "styled-components";
-
+import uuid4 from "uuid4";
 import firebase from "../../config/firebase";
 
 const Main = styled.div`
@@ -32,7 +32,11 @@ class MessageForm extends React.Component {
       user: this.props.user,
       loading: false,
       file: "",
-      isFile: false
+      isFile: false,
+      storageRef: firebase.storage().ref(),
+      uploadTask: null,
+      uploadState: "",
+      percentUploaded: 0
     };
   }
   onSubmit = event => {
@@ -40,7 +44,7 @@ class MessageForm extends React.Component {
     this.setState({
       loading: true
     });
-    if (this.state.message) {
+    if (!this.state.isFile) {
       const { user } = this.state;
       let messageData = {
         body: this.state.message,
@@ -63,29 +67,101 @@ class MessageForm extends React.Component {
         .catch(err => {
           console.error(err);
         });
+    } else {
+      this.uploadImage();
     }
+  };
+
+  uploadImage = () => {
+    const pathToUpload = this.state.currentGroup.id;
+    const ref = this.props.messagesRef;
+    const filePath = `group/public/${uuid4()}.jpg`;
+
+    this.setState(
+      {
+        uploadState: "uploading",
+        uploadTask: this.state.storageRef.child(filePath).put(this.state.file)
+      },
+      () => {
+        this.state.uploadTask.on(
+          "state_changed",
+          snap => {
+            const percentUploaded = Math.round(
+              (snap.bytesTransferred / snap.totalBytes) * 100
+            );
+            this.setState({ percentUploaded });
+          },
+          err => {
+            console.error(err);
+            this.setState({
+              uploadState: "error",
+              uploadTask: null
+            });
+          },
+          () => {
+            this.state.uploadTask.snapshot.ref
+              .getDownloadURL()
+              .then(downloadUrl => {
+                this.sendFileMessage(downloadUrl);
+              })
+              .catch(err => {
+                console.error(err);
+                this.setState({
+                  uploadState: "error",
+                  uploadTask: null
+                });
+              });
+          }
+        );
+      }
+    );
+  };
+
+  sendFileMessage = url => {
+    const { user } = this.state;
+    let messageData = {
+      image: url,
+      author: {
+        username: user.main.displayName,
+        fullname: user.misc.fullname,
+        avatar: user.main.photoURL
+      },
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    const { database } = this.props;
+    const { currentGroup } = this.state;
+    database
+      .child(currentGroup.id)
+      .push(messageData)
+      .then(() => {
+        this.setState({ loading: false, message: "" });
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
   onChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
-    if (event.target.name === 'message') {
+    if (event.target.name === "message") {
       this.setState({
         isMessage: true
-      })
+      });
     }
 
     if (event.target.value <= 0) {
       this.setState({
         isMessage: false
-      })
+      });
     }
   };
 
   selectFile = event => {
     const file = event.target.files[0];
     if (file) {
-      this.setState({ file, isFile: true, isMessage: true  });
+      this.setState({ file, isFile: true, isMessage: true });
     }
   };
 
@@ -130,7 +206,9 @@ class MessageForm extends React.Component {
               )
             }
             labelPosition="left"
-            placeholder={this.state.isFile ? "Image Uploaded" : "Write your message"}
+            placeholder={
+              this.state.isFile ? "Image Uploaded" : "Write your message"
+            }
             onChange={this.onChange}
             value={this.state.message}
             disabled={this.state.isFile ? true : false}
