@@ -1,8 +1,12 @@
 {
   "name": "cool-it",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "private": true,
   "main": "public/electron.js",
+  "author": {
+    "name": "Jacob William",
+    "url": "https://jacobwi.io/"
+  },
   "homepage": "./",
   "dependencies": {
     "bcrypt": "^3.0.3",
