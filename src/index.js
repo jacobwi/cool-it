@@ -19,7 +19,6 @@ import store from "./store";
 import { setCurrentUser, setLoader } from "./actions";
 import firebase from "./config/firebase";
 class Root extends React.Component {
-
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -27,20 +26,19 @@ class Root extends React.Component {
           .database()
           .ref("/users/" + user.uid)
           .once("value")
-          .then( snapshot => {
+          .then(snapshot => {
             this.props.setCurrentUser(user, snapshot.val());
           });
         this.props.history.push("/");
       } else {
-        this.props.setLoader(false)
         this.props.history.push("/login");
-
+        this.props.setLoader(false);
       }
     });
   }
   render() {
     return this.props.isLoading ? (
-      <Loading message="application"/>
+      <Loading message="application" />
     ) : (
       <Switch>
         <Route exact path="/" component={Layout} />

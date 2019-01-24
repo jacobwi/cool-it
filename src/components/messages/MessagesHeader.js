@@ -13,10 +13,7 @@ class MessagesHeader extends React.Component {
             {this.props.currentGroup && this.props.currentGroup.name}
             <Icon name={"star outline"} color="black" />
           </span>
-          <Header.Subheader>
-           
-            1 Members
-          </Header.Subheader>
+          <Header.Subheader>1 Members</Header.Subheader>
         </Header>
 
         {/* Channel Search Input */}

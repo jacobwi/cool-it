@@ -14,7 +14,7 @@ class Sidemenu extends Component {
         vertical
         style={{ background: "#181b26", fontSize: "1.2rem" }}
       >
-       <UserPanel  />
+        <UserPanel />
 
         <Groups />
       </Menu>

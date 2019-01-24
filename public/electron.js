@@ -9,8 +9,13 @@ const isDev = require("electron-is-dev");
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 680, webPreferences: {
-    nodeIntegration: false} });
+  mainWindow = new BrowserWindow({
+    width: 900,
+    height: 680,
+    webPreferences: {
+      nodeIntegration: false
+    }
+  });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
@@ -55,4 +60,4 @@ app.on("activate", () => {
     createWindow();
   }
 });
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";

@@ -1,17 +1,25 @@
 import React from "react";
-import { Segment, Button, Input } from "semantic-ui-react";
+import { Segment, Button, Input, Icon } from "semantic-ui-react";
 import styled from "styled-components";
-import { connect } from "react-redux";
 
-import firebase from '../../config/firebase';
+import firebase from "../../config/firebase";
 
 const Main = styled.div`
-  & .form {
-    position: fixed !important;
-    bottom: 1em;
-    margin-left: 320px !important;
-    left: 0;
-    right: 1em;
+  & .file {
+    position: absolute !important;
+    width: 2.2px !important;
+    height: 2.2px !important;
+
+    overflow: hidden;
+
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  & .selectBtn {
+    margin: 0 !important;
+    position: relative !important;
   }
 `;
 class MessageForm extends React.Component {
@@ -19,9 +27,12 @@ class MessageForm extends React.Component {
     super(props);
     this.state = {
       message: "",
+      isMessage: false,
       currentGroup: this.props.group,
       user: this.props.user,
-      loading: false
+      loading: false,
+      file: "",
+      isFile: false
     };
   }
   onSubmit = event => {
@@ -30,7 +41,7 @@ class MessageForm extends React.Component {
       loading: true
     });
     if (this.state.message) {
-      const { user } = this.state
+      const { user } = this.state;
       let messageData = {
         body: this.state.message,
         author: {
@@ -38,11 +49,11 @@ class MessageForm extends React.Component {
           fullname: user.misc.fullname,
           avatar: user.main.photoURL
         },
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
       };
 
       const { database } = this.props;
-      const { currentGroup } = this.state
+      const { currentGroup } = this.state;
       database
         .child(currentGroup.id)
         .push(messageData)
@@ -51,14 +62,38 @@ class MessageForm extends React.Component {
         })
         .catch(err => {
           console.error(err);
-
         });
     }
-
   };
   onChange = event => {
     this.setState({
       [event.target.name]: event.target.value
+    });
+    if (event.target.name === 'message') {
+      this.setState({
+        isMessage: true
+      })
+    }
+
+    if (event.target.value <= 0) {
+      this.setState({
+        isMessage: false
+      })
+    }
+  };
+
+  selectFile = event => {
+    const file = event.target.files[0];
+    if (file) {
+      this.setState({ file, isFile: true, isMessage: true  });
+    }
+  };
+
+  removeFile = () => {
+    this.setState({
+      file: "",
+      isFile: false,
+      isMessage: false
     });
   };
   render() {
@@ -69,26 +104,46 @@ class MessageForm extends React.Component {
             fluid
             name="message"
             style={{ marginBottom: "0.7em" }}
-            label={<Button icon={"add"} />}
+            label={
+              !this.state.file ? (
+                <div>
+                  <label htmlFor="hidden-new-file" className="ui icon button">
+                    <Icon name="plus" />
+                  </label>
+                  <input
+                    type="file"
+                    id="hidden-new-file"
+                    style={{ display: "none" }}
+                    onChange={this.selectFile}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className="ui icon button">
+                    <Icon
+                      name="window close outline"
+                      color="red"
+                      onClick={this.removeFile}
+                    />
+                  </label>
+                </div>
+              )
+            }
             labelPosition="left"
-            placeholder="Write your message"
+            placeholder={this.state.isFile ? "Image Uploaded" : "Write your message"}
             onChange={this.onChange}
             value={this.state.message}
+            disabled={this.state.isFile ? true : false}
           />
           <Button.Group icon widths="2">
             <Button
-              color="orange"
-              content="Add Reply"
+              color="teal"
+              content="Send"
               labelPosition="left"
               icon="edit"
               onClick={this.onSubmit}
               className={this.state.loading ? "loading" : ""}
-            />
-            <Button
-              color="teal"
-              content="Upload Media"
-              labelPosition="right"
-              icon="cloud upload"
+              disabled={this.state.isMessage ? false : true}
             />
           </Button.Group>
         </Segment>

@@ -20,7 +20,7 @@ export default function(state = INITIAL_STATE, action) {
     case SET_LOADER:
       return {
         isLoading: action.payload
-      }
+      };
     default:
       return state;
   }

@@ -8,7 +8,6 @@ export const signup = (userData, history) => dispatch => {
     .auth()
     .createUserWithEmailAndPassword(userData.email, userData.password)
     .then(newUser => {
-      console.log(newUser);
       newUser.user
         .updateProfile({
           displayName: userData.username,
@@ -22,9 +21,9 @@ export const signup = (userData, history) => dispatch => {
             .ref("users")
             .child(newUser.user.uid)
             .set({
-              username: userData.username,
               fullname: userData.fullname,
-              avatar: newUser.user.photoURL
+              avatar: newUser.user.photoURL,
+              is_online: true
             });
         });
     })
@@ -51,7 +50,7 @@ export const setLoader = condition => {
     type: SET_LOADER,
     payload: condition
   };
-}
+};
 export const setCurrentGroup = group => {
   return {
     type: SET_CURRENT_GROUP,

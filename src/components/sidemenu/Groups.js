@@ -15,24 +15,24 @@ class Groups extends React.Component {
   };
 
   componentDidMount() {
-      this.getGroups();
+    this.getGroups();
   }
   componentWillUnmount() {
     this.state.groupsRef.off();
   }
   getGroups = () => {
     let groups = [];
-    this.state.groupsRef.on('child_added', snap => {
+    this.state.groupsRef.on("child_added", snap => {
       groups.push(snap.val());
 
-      this.setState({
+      this.setState(
+        {
           groups
-      }, () => this.setGroup(this.state.groups[0]))
-
-    })
-
-
-}
+        },
+        () => this.setGroup(this.state.groups[0])
+      );
+    });
+  };
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -47,10 +47,10 @@ class Groups extends React.Component {
       name: this.state.groupName,
       details: this.state.groupDetails,
       createdBy: {
-        name: this.props.currentUser.fullname,
-        username: this.props.currentUser.displayName,
-        avatar: this.props.currentUser.photoURL,
-        id: this.props.currentUser.uid
+        name: this.props.currentUser.misc.fullname,
+        username: this.props.currentUser.main.displayName,
+        avatar: this.props.currentUser.main.photoURL,
+        id: this.props.currentUser.main.uid
       },
       id: key
     };
