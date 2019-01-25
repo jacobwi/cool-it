@@ -73,8 +73,6 @@ class MessageForm extends React.Component {
   };
 
   uploadImage = () => {
-    const pathToUpload = this.state.currentGroup.id;
-    const ref = this.props.messagesRef;
     const filePath = `group/public/${uuid4()}.jpg`;
 
     this.setState(

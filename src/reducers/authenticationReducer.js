@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   isLoading: true
 };
 
-export default function(state = INITIAL_STATE, action) {
+export const authenticationReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_USER:
       return {
@@ -24,4 +24,4 @@ export default function(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
