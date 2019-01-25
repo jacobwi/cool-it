@@ -8,7 +8,7 @@
 ---
 
 ## Screenshot
-<h1 align="center"><img src="./img/coolit.png" alt="authenticator" width="128px">
+<h1 align="center"><img src="./img/coolit.png" alt="authenticator" width="460px">
 </h1>
 
 ---
