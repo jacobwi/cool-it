@@ -18,7 +18,6 @@
 - Go to releases
 - Download the build that's compatible with your operation system.
 
-
 ---
 
 ## FAQ
