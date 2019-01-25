@@ -1,4 +1,4 @@
-<h1 align="center"><img src="./img/logo.png" title="Authenticator" alt="authenticator" width="128px">
+<h1 align="center"><img src="./img/logo.png" alt="authenticator" width="128px">
 </h1>
 
 # Cool It!
@@ -7,6 +7,11 @@
 
 ---
 
+## Screenshot
+<h1 align="center"><img src="./img/coolit.png" alt="authenticator" width="128px">
+</h1>
+
+---
 
 ## Installation
 
