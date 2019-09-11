@@ -26,6 +26,7 @@ class Messages extends React.Component {
     if (this.state.group) {
       this.getMessages(this.state.group.id);
     }
+    console.log(this.props)
   }
   getMessages = id => {
     let loadedMessages = [];

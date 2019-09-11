@@ -32,6 +32,7 @@ class Groups extends React.Component {
         () => this.setGroup(this.state.groups[0])
       );
     });
+
   };
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -67,7 +68,7 @@ class Groups extends React.Component {
       });
   };
   openModal = () => this.setState({ modal: true });
-
+  closeModal = () => this.setState({ modal: false });
   displayGroups = groups =>
     groups.length > 0 &&
     groups.map(group => (

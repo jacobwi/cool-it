@@ -41,11 +41,13 @@ class MessageForm extends React.Component {
   }
   onSubmit = event => {
     event.preventDefault();
+    console.log(firebase)
     this.setState({
       loading: true
     });
     if (!this.state.isFile) {
       const { user } = this.state;
+      
       let messageData = {
         body: this.state.message,
         author: {
